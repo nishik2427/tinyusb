@@ -64,6 +64,9 @@ TU_ATTR_ALWAYS_INLINE static inline bool is_host_mode(void)
 
 void rp2040_usb_init(void)
 {
+  
+  //busy_wait_at_least_cycles(10000);
+  
   // Reset usb controller
   reset_block(RESETS_RESET_USBCTRL_BITS);
   unreset_block_wait(RESETS_RESET_USBCTRL_BITS);

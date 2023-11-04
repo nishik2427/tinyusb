@@ -339,6 +339,11 @@ bool tuh_init(uint8_t controller_id) {
   // skip if already initialized
   if ( tuh_inited() ) return true;
 
+  TU_LOG(2, "\r\n");
+  TU_LOG(2, "tuh_inited start\r\n");
+  busy_wait_at_least_cycles(1000000000);
+
+
   TU_LOG_USBH("USBH init on controller %u\r\n", controller_id);
   TU_LOG_INT(CFG_TUH_LOG_LEVEL, sizeof(usbh_device_t));
   TU_LOG_INT(CFG_TUH_LOG_LEVEL, sizeof(hcd_event_t));
@@ -387,6 +392,8 @@ bool tuh_init(uint8_t controller_id) {
 
   TU_ASSERT(hcd_init(controller_id));
   hcd_int_enable(controller_id);
+
+  TU_LOG(2, "tuh_inited end\r\n");
 
   return true;
 }

@@ -45,6 +45,7 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 else ()
 	set(TINYUSB_DEBUG_LEVEL 0)
 endif()
+##set(TINYUSB_DEBUG_LEVEL 3)
 
 target_compile_definitions(tinyusb_common_base INTERFACE
 		CFG_TUSB_MCU=OPT_MCU_RP2040

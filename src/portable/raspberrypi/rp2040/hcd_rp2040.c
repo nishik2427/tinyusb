@@ -186,9 +186,15 @@ static void __tusb_irq_path_func(hcd_rp2040_irq)(void)
 {
   uint32_t status = usb_hw->ints;
   uint32_t handled = 0;
+  
+  TU_LOG(2, "\r\n");
+  TU_LOG(2, "Tusb_irq_path_func\r\n");
+  TU_LOG(2, "Status = 0x%x\r\n", (uint) (status));
+  //TU_LOG(2, "IRQ 0x%x\n", (uint) (status ^ handled));
 
   if ( status & USB_INTS_HOST_CONN_DIS_BITS )
   {
+    TU_LOG(2, "USB_INTS_HOST_CONN_DIS_BITS\r\n");
     handled |= USB_INTS_HOST_CONN_DIS_BITS;
 
     if ( dev_speed() )
@@ -210,6 +216,7 @@ static void __tusb_irq_path_func(hcd_rp2040_irq)(void)
     // NOTE THIS SHOULD HAVE PRIORITY OVER BUFF_STATUS
     // AND TRANS_COMPLETE as the stall is an alternative response
     // to one of those events
+    TU_LOG(2, "USB_INTS_STALL_BITS\r\n");
     pico_trace("Stall REC\n");
     handled |= USB_INTS_STALL_BITS;
     usb_hw_clear->sie_status = USB_SIE_STATUS_STALL_REC_BITS;
@@ -218,6 +225,7 @@ static void __tusb_irq_path_func(hcd_rp2040_irq)(void)
 
   if ( status & USB_INTS_BUFF_STATUS_BITS )
   {
+    TU_LOG(2, "USB_INTS_BUFF_STATUS_BITS\r\n");
     handled |= USB_INTS_BUFF_STATUS_BITS;
     TU_LOG(2, "Buffer complete\r\n");
     hw_handle_buff_status();
@@ -225,6 +233,7 @@ static void __tusb_irq_path_func(hcd_rp2040_irq)(void)
 
   if ( status & USB_INTS_TRANS_COMPLETE_BITS )
   {
+    TU_LOG(2, "USB_INTS_TRANS_COMPLETE_BITS\r\n");
     handled |= USB_INTS_TRANS_COMPLETE_BITS;
     usb_hw_clear->sie_status = USB_SIE_STATUS_TRANS_COMPLETE_BITS;
     TU_LOG(2, "Transfer complete\r\n");
@@ -233,12 +242,19 @@ static void __tusb_irq_path_func(hcd_rp2040_irq)(void)
 
   if ( status & USB_INTS_ERROR_RX_TIMEOUT_BITS )
   {
+    TU_LOG(2, "USB_INTS_ERROR_RX_TIMEOUT_BITS\r\n");
+    TU_LOG(2, "Handled = 0x%x\r\n", (uint) (handled));
+    TU_LOG(2, "IRQ =  0x%x\r\n", (uint) (status ^ handled));
     handled |= USB_INTS_ERROR_RX_TIMEOUT_BITS;
+    TU_LOG(2, "Handled = 0x%x\r\n", (uint) (handled));
     usb_hw_clear->sie_status = USB_SIE_STATUS_RX_TIMEOUT_BITS;
+    //rp2040_usb_init();
+
   }
 
   if ( status & USB_INTS_ERROR_DATA_SEQ_BITS )
   {
+    TU_LOG(2, "USB_INTS_ERROR_DATA_SEQ_BITS\r\n");
     usb_hw_clear->sie_status = USB_SIE_STATUS_DATA_SEQ_ERROR_BITS;
     TU_LOG(3, "  Seq Error: [0] = 0x%04u  [1] = 0x%04x\r\n",
            tu_u32_low16(*epx.buffer_control),
