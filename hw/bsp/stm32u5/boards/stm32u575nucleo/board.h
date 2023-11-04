@@ -1,8 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2022, Hongtai Liu <lht856@foxmail.com>
- * Ha Thach (tinyusb.org)
+ * Copyright (c) 2023, Ha Thach (tinyusb.org)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,22 +33,22 @@ extern "C"
 #endif
 
 // LED GREEN
-#define LED_PORT GPIOB
+#define LED_PORT GPIOC
 #define LED_PIN GPIO_PIN_7
 #define LED_STATE_ON 1
 
-// // LED
-#define BUTTON_PORT GPIOC
-#define BUTTON_PIN GPIO_PIN_13
+// BUTTON
+#define BUTTON_PORT GPIOA
+#define BUTTON_PIN GPIO_PIN_0
 #define BUTTON_STATE_ACTIVE 1
 
 // UART Enable for STLink VCOM
-#define UART_DEV USART1
-#define UART_CLK_EN __HAL_RCC_USART1_CLK_ENABLE
-#define UART_GPIO_PORT GPIOA
-#define UART_GPIO_AF GPIO_AF7_USART1
-#define UART_TX_PIN GPIO_PIN_9
-#define UART_RX_PIN GPIO_PIN_10
+#define UART_DEV LPUART1
+#define UART_CLK_EN __HAL_RCC_LPUART1_CLK_ENABLE
+#define UART_GPIO_PORT GPIOG
+#define UART_GPIO_AF GPIO_AF8_LPUART1
+#define UART_TX_PIN GPIO_PIN_7
+#define UART_RX_PIN GPIO_PIN_8
 
 //--------------------------------------------------------------------+
 // RCC Clock
@@ -60,7 +59,7 @@ static void SystemClock_Config(void) {
   RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
   RCC_PeriphCLKInitTypeDef PeriphClkInit = { 0 };
 
-  /* Enable Power Clock*/
+  /* Enable Power Clock */
   __HAL_RCC_PWR_CLK_ENABLE();
 
   /** Configure the main internal regulator output voltage

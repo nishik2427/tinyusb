@@ -417,7 +417,6 @@ bool hcd_init(uint8_t rhport) {
   (void) rhport;
 
   tuh_max3421_int_api(rhport, false);
-  tuh_max3421_spi_cs_api(rhport, false);
 
   TU_LOG2_INT(sizeof(max3421_ep_t));
   TU_LOG2_INT(sizeof(max3421_data_t));
@@ -433,8 +432,9 @@ bool hcd_init(uint8_t rhport) {
   reg_write(rhport, PINCTL_ADDR, PINCTL_FDUPSPI, false);
 
   // V1 is 0x01, V2 is 0x12, V3 is 0x13
-//  uint8_t const revision = reg_read(rhport, REVISION_ADDR, false);
-//  TU_LOG2_HEX(revision);
+  uint8_t const revision = reg_read(rhport, REVISION_ADDR, false);
+  TU_ASSERT(revision == 0x01 || revision == 0x12 || revision == 0x13, false);
+  TU_LOG2_HEX(revision);
 
   // reset
   reg_write(rhport, USBCTL_ADDR, USBCTL_CHIPRES, false);
